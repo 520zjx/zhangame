@@ -1,0 +1,112 @@
+import random as r
+print('欢迎游玩！')
+print('目前版本：23y2b')
+print('版本更新内容：1-修复部分bug；\n2-系统优化；')
+Hero={1:{
+    'HP': 500, 
+    'skills':{
+        1: {'injury': [20, 22], 
+            'name': '撼地猛击'}, 
+        2: {'injury': [30, 90],
+            'name': '熔岩炸弹', 
+            'times': 3},
+        3: {'heals': 75, 
+            'name': '吸收熔岩'}}, 
+    'armor': 10,
+    'name':'下界合金巨兽',
+    '2':{'injury':[20,22],
+        'condition':1/3}},
+2:{'HP': 333, 
+    'armor': 20,
+    'skills':{
+        1: {'injury': 16, 
+            'name': '裂地重拳'}, 
+        2: {'injury': 22, 
+            'name': '引力重拳',
+            'burial':2},
+        3:{'injury':12,
+            'name':'横扫挥击',
+            'vertigo':1},
+        4:{'injury':16,
+            'name':'爆裂冲击'},
+        5:{'injury':34,
+            'name':'上勾拳',
+            'burial':1,
+            'vertigo':2},
+        6:{'injury':[0,161],
+            'injury2':[0,483],
+            'burial':1,
+            'name':'召唤虚空符文'},
+        7:{'injury':[0,36],
+            'name':'潜影导弹',
+            'vertigo':2},
+        8:{'injury':32,
+            'name':'虚空涡流'},
+        9:{'injury':22,
+            'name':'火箭拳',
+            'burial':1,
+            'vertigo':2},
+        10:{'injury':[20,265],
+            'name':'虚空重击'},
+        11:{'injury':[33,422],
+            'name':'跃迁猛击'}},
+    'name':'末影守卫',
+    2:{'injury':27,
+        'arror':15}}}
+round=1
+game_choice = int(input('您需要做什么呢:1-查看图鉴,2-开始游戏,3-退出\n'))
+if game_choice == 1:
+    tujian_choice_hero=int(input(''))
+elif game_choice == 2:
+    jia_choice_hero = int(input('现在由甲方选择:\n1-下界合金巨兽\n2-末影守卫\n'))
+    yi_choice_hero = int(input('现在由乙方选择:\n1-下界合金巨兽\n2-末影守卫\n'))
+    print('游戏正式开始！')
+    jia_hero=Hero[jia_choice_hero]
+    yi_hero=Hero[yi_choice_hero]
+    while jia_hero['HP'] >= 0 or yi_hero['HP'] >= 0:
+        print('请甲方选择技能：')
+        for skill in list(jia_hero['skills']):
+            print(str(skill)+'-'+jia_hero['skills'][skill]['name'])
+        jia_skill=int(input())
+        if 'heals' not in jia_hero['skills'][jia_skill].keys():
+            if type(jia_hero['skills'][jia_skill]['injury'])!=type([1]):
+                jia_injury=jia_hero['skills'][jia_skill]['injury']*(1-0.4*(yi_hero['armor']-jia_injury*4/8))
+                yi_hero['HP'] -= jia_injury
+            else:
+                jia_injury1=r.randint(jia_hero['skills'][jia_skill]['injury'][0], jia_hero['skills'][jia_skill]['injury'][1])
+                jia_injury=jia_injury1 * (1-0.4*(yi_hero['armor']-jia_injury1*4/8))
+                yi_hero['HP'] -= jia_injury 
+        else:
+            if type(jia_hero['skills'][jia_skill]['heals'])==type([1]):
+                jia_hero['HP'] += r.randint(jia_hero['skills'][jia_skill]['heals'][0], jia_hero['skills'][jia_skill]['heals'][1])
+            else:
+                jia_hero['HP'] += jia_hero['skills'][jia_skill]['heals']
+        print('甲方对乙方造成了{}点伤害。'.format(jia_injury))
+        print('请乙方选择技能：')
+        for skill in list(yi_hero['skills']):
+            print(str(skill)+'-'+yi_hero['skills'][skill]['name'])
+        yi_skill=int(input())
+        if 'heals'not in yi_hero['skills'][yi_skill].keys():
+            if type(yi_hero['skills'][yi_skill]['injury']) != type([1]):
+                yi_injury=yi_hero['skills'][yi_skill]['injury']* (1-0.4*(jia_hero['armor']-yi_hero['skills'][yi_skill]['injury']*4/8))
+                jia_hero['HP'] -= yi_injury 
+            else:
+                yi_injury1=r.randint(yi_hero['skills'][yi_skill]['injury'][0], yi_hero['skills'][yi_skill]['injury'][1])
+                yi_injury=yi_injury1 * (1-0.4*(jia_hero['armor']-yi_injury1*4/8))
+                jia_hero['HP'] -= yi_injury
+        else:
+            if type(yi_hero['skills'][yi_skill]['heals']) == type([1]):
+                yi_hero['HP'] += r.randint(yi_hero['skills'][yi_skill]['heals'][0], yi_hero['skills'][yi_skill]['heals'][1])
+            else:
+                yi_hero['HP'] += yi_hero['skills'][yi_skill]['heals']
+        print('乙方对甲方造成了{}点伤害。'.format(yi_injury))
+        print('第{0}回合结束，甲方还剩下{1}点生命，乙方还剩下{2}点生命。'.format(round,jia_hero['HP'],yi_hero['HP']))
+        round+=1
+    else:
+        if jia_hero['HP']>yi_hero['HP']:
+            print('甲方胜利！')
+        else:
+            print('乙方胜利！')
+elif game_choice == 3:
+    print('正在退出')
+    quit()
